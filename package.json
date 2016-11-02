@@ -1,0 +1,29 @@
+{
+  "name": "babel-plugin-define-function",
+  "description": "Babel plugin to rdefine variables dynamically at build time.",
+  "version": "1.0.0",
+  "author": "Dylan Piercey <pierceydylan@gmail.com>",
+  "bugs": "https://github.com/DylanPiercey/babel-plugin-dynamic-import/issues",
+  "files": [
+    "index.js"
+  ],
+  "homepage": "https://github.com/DylanPiercey/babel-plugin-dynamic-import",
+  "keywords": [
+    "babel",
+    "plugin",
+    "define",
+    "dynamic",
+    "function",
+    "import"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DylanPiercey/babel-plugin-dynamic-import"
+  },
+  "dependencies": {
+    "babel-template": "^6.16.0",
+    "find-babel-config": "^1.0.1"
+  }
+}
