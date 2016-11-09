@@ -2,7 +2,8 @@
 
 const path = require('path')
 const template = require('babel-template')
-const findBabelConfig = require('find-babel-config')
+const findRoot = require('find-root')
+const CWD = process.cwd()
 
 /**
  * Babel plugin that looks for TemplateLiterals that are using the name `html` and minifies the contents.
@@ -10,9 +11,11 @@ const findBabelConfig = require('find-babel-config')
 module.exports = function babelPluginAsHtml (babel) {
   return {
     pre: function pre (file, state) {
-      const startPath = (file.opts.filename === 'unknown') ? './' : file.opts.filename
-      const { file: babelFile = process.cwd() + '/' } = findBabelConfig.sync(startPath)
-      const defineFile = path.join(path.dirname(babelFile), '.babel-define')
+      const rootPath = findRoot(file.opts.filename === 'unknown'
+        ? CWD
+        : file.opts.filename
+      )
+      const defineFile = path.join(rootPath, '.babel-define')
 
       try {
         this.options = require(defineFile)
