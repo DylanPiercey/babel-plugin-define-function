@@ -3,7 +3,7 @@
 const path = require('path')
 const template = require('babel-template')
 const findRoot = require('find-root')
-const DEFINITIONS_PATH = findRoot(path.join(__dirname, '../.babel-define'))
+const DEFINITIONS_PATH = path.join(findRoot(path.join(__dirname, '..')), '.babel-define')
 
 // Load options and warn if missing.
 let options
