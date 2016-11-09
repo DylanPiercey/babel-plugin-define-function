@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-define-function",
   "description": "Babel plugin to redefine variables dynamically at build time.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Dylan Piercey <pierceydylan@gmail.com>",
   "bugs": "https://github.com/DylanPiercey/babel-plugin-dynamic-import/issues",
   "dependencies": {

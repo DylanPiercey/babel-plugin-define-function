@@ -3,44 +3,41 @@
 const path = require('path')
 const template = require('babel-template')
 const findRoot = require('find-root')
-const CWD = process.cwd()
+const DEFINITIONS_PATH = findRoot(path.join(__dirname, '../.babel-define'))
 
-/**
- * Babel plugin that looks for TemplateLiterals that are using the name `html` and minifies the contents.
- */
-module.exports = function babelPluginAsHtml (babel) {
-  return {
-    pre: function pre (file, state) {
-      const rootPath = findRoot(file.opts.filename === 'unknown'
-        ? CWD
-        : file.opts.filename
-      )
-      const defineFile = path.join(rootPath, '.babel-define')
+// Load options and warn if missing.
+let options
+try {
+  options = require(DEFINITIONS_PATH)
+} catch (err) {
+  throw new Error('Babel-Plugin-Define-Function: Could not require definitions from ' + JSON.stringify(DEFINITIONS_PATH) + '.')
+}
 
-      try {
-        this.options = require(defineFile)
-      } catch (err) {
-        throw new Error('Babel-Plugin-Define-Function: Could not require definitions from ' + JSON.stringify(defineFile) + '.')
-      }
-    },
-    visitor: {
-      Identifier: {
-        exit: function exit (nodePath, state) {
-          const name = nodePath.node.name
-          if (!this.options.hasOwnProperty(name)) return
+const plugin = {
+  visitor: {
+    Identifier: {
+      exit: function exit (nodePath, state) {
+        const name = nodePath.node.name
+        if (!options.hasOwnProperty(name)) return
 
-          const result = typeof this.options[name] === 'function'
-            ? this.options[name]()
-            : this.options[name]
-          const replacement = template(result || '')()
+        const result = typeof options[name] === 'function'
+          ? options[name]()
+          : options[name]
+        const replacement = template(result || '')()
 
-          if (replacement) {
-            nodePath.replaceWith(replacement)
-          } else {
-            nodePath.remove()
-          }
+        if (replacement) {
+          nodePath.replaceWith(replacement)
+        } else {
+          nodePath.remove()
         }
       }
     }
   }
+}
+
+/**
+ * Babel plugin that looks will replace variables with their exported value from a definitions file.
+ */
+module.exports = function babelPluginAsHtml (babel) {
+  return plugin
 }
