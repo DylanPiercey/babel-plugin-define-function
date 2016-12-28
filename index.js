@@ -1,28 +1,19 @@
 'use strict'
 
-const path = require('path')
 const template = require('babel-template')
-const findRoot = require('find-root')
-const DEFINITIONS_PATH = path.join(findRoot(path.join(__dirname, '..')), '.babel-define')
-
-// Load options and warn if missing.
-let options
-try {
-  options = require(DEFINITIONS_PATH)
-} catch (err) {
-  throw new Error('Babel-Plugin-Define-Function: Could not require definitions from ' + JSON.stringify(DEFINITIONS_PATH) + '.')
-}
-
 const plugin = {
+  name: 'define-template',
   visitor: {
     Identifier: {
       exit: function exit (nodePath, state) {
         const name = nodePath.node.name
-        if (!options.hasOwnProperty(name)) return
 
-        const result = typeof options[name] === 'function'
-          ? options[name]()
-          : options[name]
+        if (typeof this.opts === 'string') this.opts = require(this.opts)
+        if (!this.opts.hasOwnProperty(name)) return
+
+        const result = typeof this.opts[name] === 'function'
+          ? this.opts[name]()
+          : this.opts[name]
         const replacement = template(result || '')()
 
         if (replacement) {
@@ -36,8 +27,8 @@ const plugin = {
 }
 
 /**
- * Babel plugin that looks will replace variables with their exported value from a definitions file.
+ * Babel plugin that looks will replace variables with their exported value from the provided options.
  */
-module.exports = function babelPluginAsHtml (babel) {
+module.exports = function babelPluginDefineTemplate () {
   return plugin
 }

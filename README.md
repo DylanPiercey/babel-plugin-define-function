@@ -1,13 +1,21 @@
 # babel-plugin-define-function
 
 A plugin for Babel 6 allows you to define dynamic variables at build time with functions.
-All of the defined variables must exist in a `.babel-define.js` or `.babel-define.json` file.
 
 ## Installation
 
 ```bash
 $ npm install babel-plugin-define-function --save-dev
-$ babel --plugins define-function script.js
+```
+
+**.babelrc**
+
+```json
+{
+  "plugins": [
+    ["define-function", "./path/to/config/file.js"]
+  ]
+}
 ```
 
 ## Example
@@ -49,6 +57,10 @@ and on the second build (if watching):
 console.log('package version is ' + '1.0.0')
 console.log('git build is ' + '0c25b7ea0ed7554b7da285907154b66a694c3060-1')
 ```
+
+## Contributions
+
+* Use `npm test` to run tests.
 
 ## License
 
